@@ -1,0 +1,131 @@
+### Двоичные датчики ###
+
+# Внешний вид
+homeassistant:
+  customize_glob:
+    "binary_sensor.*_door":
+      icon: mdi:door
+    "binary_sensor.*_motion":
+      icon: mdi:motion-sensor
+  
+  customize:
+    binary_sensor.hall_doorbell:
+      friendly_name: Звонок (прихожая)
+    binary_sensor.hall_intercom:
+      friendly_name: Домофон (прихожая)
+    binary_sensor.hall_door:
+      friendly_name: Вход
+    binary_sensor.hall_motion:
+      friendly_name: Прихожая
+    
+    binary_sensor.bedroom_conditioner:
+      friendly_name: Кондиционер (спальня)
+    binary_sensor.bathroom_washing_machine:
+      friendly_name: Стир. машина (кухня)
+    binary_sensor.bathroom_door:
+      friendly_name: Ванная
+    binary_sensor.bathroom_motion:
+      friendly_name: Ванная
+    
+    binary_sensor.kitchen_motion:
+      friendly_name: Кухня
+    
+    binary_sensor.balcony_door:
+      friendly_name: Балкон
+    binary_sensor.balcony_motion:
+      friendly_name: Балкон
+
+# Платформа
+binary_sensor:
+  - platform: rest
+    name: hall_doorbell
+    device_class: sound
+    resource: http://192.168.48.20/sec/?pt=10&cmd=get
+    scan_interval: 1
+  - platform: rest
+    name: hall_intercom
+    device_class: sound
+    resource: http://192.168.48.30/sec/?pt=22&cmd=get
+    scan_interval: 1
+  - platform: rest
+    name: hall_door
+    device_class: door
+    resource: http://192.168.48.30/sec/?pt=23&cmd=get
+    value_template: >
+      {% set val = value.split("/")[0] %}
+      {% if val == 'ON' %}
+        OFF
+      {% elif val == 'OFF' %}
+        ON
+      {% endif %}
+    scan_interval: 2
+  - platform: rest
+    name: hall_motion
+    device_class: motion
+    resource: http://192.168.48.30/sec/?pt=18&cmd=get
+    value_template: "{{ value.split(\"/\")[0] }}"
+    scan_interval: !secret scan_sensors
+
+  - platform: rest
+    name: bedroom_conditioner
+    device_class: power
+    resource: http://192.168.48.30/sec/?pt=10&cmd=get
+    value_template: "{{ value.split(\"/\")[0] }}"
+    scan_interval: !secret scan_sensors
+
+  - platform: rest
+    name: bathroom_washing_machine
+    device_class: power
+    resource: http://192.168.48.30/sec/?pt=11&cmd=get
+    value_template: "{{ value.split(\"/\")[0] }}"
+    scan_interval: !secret scan_sensors
+  - platform: rest
+    name: bathroom_door
+    device_class: door
+    resource: http://192.168.48.30/sec/?pt=15&cmd=get
+    value_template: >
+      {% set val = value.split("/")[0] %}
+      {% if val == 'ON' %}
+        OFF
+      {% elif val == 'OFF' %}
+        ON
+      {% endif %}
+    scan_interval: 2
+  - platform: rest
+    name: bathroom_motion
+    device_class: motion
+    resource: http://192.168.48.30/sec/?pt=30&cmd=get
+    value_template: "{{ value.split(\"/\")[0] }}"
+    scan_interval: !secret scan_sensors
+
+  - platform: rest
+    name: kitchen_motion
+    device_class: motion
+    resource: http://192.168.48.30/sec/?pt=19&cmd=get
+    value_template: "{{ value.split(\"/\")[0] }}"
+    scan_interval: !secret scan_sensors
+
+  - platform: rest
+    name: balcony_door
+    device_class: door
+    resource: http://192.168.48.30/sec/?pt=27&cmd=get
+    value_template: >
+      {% set val = value.split("/")[0] %}
+      {% if val == 'ON' %}
+        OFF
+      {% elif val == 'OFF' %}
+        ON
+      {% endif %}
+    scan_interval: 2
+  - platform: rest
+    name: balcony_motion
+    device_class: motion
+    resource: http://192.168.48.30/sec/?pt=20&cmd=get
+    value_template: >
+      {% set val = value.split("/")[0] %}
+      {% if val == 'ON' %}
+        OFF
+      {% elif val == 'OFF' %}
+        ON
+      {% endif %}
+    scan_interval: !secret scan_sensors

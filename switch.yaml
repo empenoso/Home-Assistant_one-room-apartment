@@ -1,0 +1,135 @@
+### Переключатели ###
+
+# Внешний вид
+homeassistant:
+  customize:
+    switch.wall_plug_7:
+      entity_picture: /local/icons/fibaro/wall_plug/eu_f.png
+    
+    switch.hall_zeoota_1:
+      friendly_name: Розетка 1
+    switch.hall_zeoota_2:
+      friendly_name: Розетка 2
+    switch.hall_zeoota_3:
+      friendly_name: Розетка 3
+    switch.hall_zeoota_4:
+      friendly_name: USB-порты
+    
+    switch.bedroom_left_bra:
+      friendly_name: Левая бра
+      icon: mdi:wall-sconce
+    switch.bedroom_right_bra:
+      friendly_name: Правая бра
+      icon: mdi:wall-sconce
+    switch.balcony_strip_light:
+      friendly_name: Лента
+      icon: mdi:wall-sconce-flat
+    switch.kitchen_strip_light:
+      friendly_name: Лента
+      icon: mdi:wall-sconce-flat
+    switch.bathroom_toggle_water:
+      friendly_name: Перекр. воды
+      icon: mdi:pipe-disconnected
+    switch.kitchen_lamp:
+      friendly_name: Лампа
+      icon: mdi:ceiling-light
+    switch.bathroom_vent:
+      friendly_name: Вентиляция
+      icon: mdi:fan
+    switch.hall_strip_light:
+      friendly_name: Лента
+      icon: mdi:wall-sconce-flat
+
+# Платформа
+switch:
+  - platform: mqtt
+    name: hall_zeoota_1
+    state_topic: "stat/ZEOOTA_3x_plus/POWER1"
+    command_topic: "cmnd/ZEOOTA_3x_plus/POWER1"
+    availability_topic: "tele/ZEOOTA_3x_plus/LWT"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    payload_available: "Online"
+    payload_not_available: "Offline"
+    retain: true
+    
+  - platform: mqtt
+    name: hall_zeoota_2
+    state_topic: "stat/ZEOOTA_3x_plus/POWER2"
+    command_topic: "cmnd/ZEOOTA_3x_plus/POWER2"
+    availability_topic: "tele/ZEOOTA_3x_plus/LWT"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    payload_available: "Online"
+    payload_not_available: "Offline"
+    retain: true
+    
+  - platform: mqtt
+    name: hall_zeoota_3
+    state_topic: "stat/ZEOOTA_3x_plus/POWER3"
+    command_topic: "cmnd/ZEOOTA_3x_plus/POWER3"
+    availability_topic: "tele/ZEOOTA_3x_plus/LWT"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    payload_available: "Online"
+    payload_not_available: "Offline"
+    retain: true
+    
+  - platform: mqtt
+    name: hall_zeoota_4
+    state_topic: "stat/ZEOOTA_3x_plus/POWER4"
+    command_topic: "cmnd/ZEOOTA_3x_plus/POWER4"
+    availability_topic: "tele/ZEOOTA_3x_plus/LWT"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    payload_available: "Online"
+    payload_not_available: "Offline"
+    retain: true
+
+  - platform: command_line
+    scan_interval: !secret scan_switches
+    switches:
+      bedroom_left_bra:
+        command_on: "curl -X GET 'http://192.168.48.20/sec/?pt=1&cmd=1:1'"
+        command_off: "curl -X GET 'http://192.168.48.20/sec/?pt=1&cmd=1:0'"
+        command_state: "curl -X GET 'http://192.168.48.20/sec/?pt=1&cmd=get'"
+        value_template: '{{ value == "ON"}}'
+      bedroom_right_bra:
+        command_on: "curl -X GET 'http://192.168.48.20/sec/?pt=0&cmd=0:1'"
+        command_off: "curl -X GET 'http://192.168.48.20/sec/?pt=0&cmd=0:0'"
+        command_state: "curl -X GET 'http://192.168.48.20/sec/?pt=0&cmd=get'"
+        value_template: '{{ value == "ON"}}'
+      balcony_strip_light:
+        command_on: "curl -X GET 'http://192.168.48.20/sec/?pt=5&cmd=5:1'"
+        command_off: "curl -X GET 'http://192.168.48.20/sec/?pt=5&cmd=5:0'"
+        command_state: "curl -X GET 'http://192.168.48.20/sec/?pt=5&cmd=get'"
+        value_template: '{{ value == "ON"}}'
+      kitchen_strip_light:
+        command_on: "curl -X GET 'http://192.168.48.20/sec/?pt=7&cmd=7:1'"
+        command_off: "curl -X GET 'http://192.168.48.20/sec/?pt=7&cmd=7:0'"
+        command_state: "curl -X GET 'http://192.168.48.20/sec/?pt=7&cmd=get'"
+        value_template: '{{ value == "ON"}}'
+      bathroom_toggle_water:
+        command_on: "curl -X GET 'http://192.168.48.20/sec/?pt=8&cmd=8:0'; curl -X GET 'http://192.168.48.20/sec/?pt=9&cmd=9:0'; curl -X GET 'http://192.168.48.20/sec/?pt=9&cmd=9:1'"
+        command_off: "curl -X GET 'http://192.168.48.20/sec/?pt=8&cmd=8:0'; curl -X GET 'http://192.168.48.20/sec/?pt=9&cmd=9:0'; curl -X GET 'http://192.168.48.20/sec/?pt=8&cmd=8:1'; sleep 20; curl -X GET 'http://192.168.48.20/sec/?pt=8&cmd=8:0'"
+        command_state: "curl -X GET 'http://192.168.48.20/sec/?pt=9&cmd=get'"
+        value_template: '{{ value == "ON"}}'
+      kitchen_lamp:
+        command_on: "curl -X GET 'http://192.168.48.20/sec/?pt=13&cmd=13:1'"
+        command_off: "curl -X GET 'http://192.168.48.20/sec/?pt=13&cmd=13:0'"
+        command_state: "curl -X GET 'http://192.168.48.20/sec/?pt=13&cmd=get'"
+        value_template: '{{ value == "ON"}}'
+      bathroom_vent:
+        command_on: "curl -X GET 'http://192.168.48.20/sec/?pt=22&cmd=22:1'"
+        command_off: "curl -X GET 'http://192.168.48.20/sec/?pt=22&cmd=22:0'"
+        command_state: "curl -X GET 'http://192.168.48.20/sec/?pt=22&cmd=get'"
+        value_template: '{{ value == "ON"}}'
+      hall_strip_light:
+        command_on: "curl -X GET 'http://192.168.48.20/sec/?pt=23&cmd=23:1'"
+        command_off: "curl -X GET 'http://192.168.48.20/sec/?pt=23&cmd=23:0'"
+        command_state: "curl -X GET 'http://192.168.48.20/sec/?pt=23&cmd=get'"
+        value_template: '{{ value == "ON"}}'

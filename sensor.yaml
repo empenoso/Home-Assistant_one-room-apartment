@@ -1,0 +1,123 @@
+### Датчики ###
+
+# Внешний вид
+homeassistant:
+  customize_glob:
+    "sensor.*_temperature":
+      entity_picture: /local/icons/thermometer.png
+    "sensor.*_humidity":
+      entity_picture: /local/icons/humidity.png
+    "sensor.*_luminance":
+      icon: mdi:theme-light-dark
+  
+  customize:
+    sensor.balcony_temperature:
+      friendly_name: Балкон
+    sensor.balcony_humidity:
+      friendly_name: Балкон
+    sensor.balcony_pressure:
+      friendly_name: Балкон
+    sensor.balcony_luminance:
+      friendly_name: Балкон
+    
+    sensor.bedroom_temperature:
+      friendly_name: Спальня
+    sensor.bedroom_humidity:
+      friendly_name: Спальня
+    sensor.bedroom_dioxide:
+      friendly_name: Спальня
+    sensor.bedroom_battery:
+      friendly_name: Спальня
+    
+    sensor.kitchen_battery:
+      friendly_name: Кухня
+    sensor.bathroom_temperature:
+      friendly_name: Ванная
+    sensor.bathroom_humidity:
+      friendly_name: Ванная
+    sensor.bathroom_cold_pipe:
+      friendly_name: Ванная
+    sensor.bathroom_hot_pipe:
+      friendly_name: Ванная
+    sensor.bathroom_tub:
+      friendly_name: Ванна
+
+# Платформа
+sensor:
+  - platform: rest
+    name: balcony_temperature
+    unit_of_measurement: '°C'
+    device_class: temperature
+    resource: http://192.168.48.30/sec/?pt=0&scl=1&i2c_dev=bmx280&i2c_par=1:60000:REGEX((.*?))
+  - platform: rest
+    name: balcony_humidity
+    unit_of_measurement: '%'
+    device_class: humidity
+    resource: http://192.168.48.30/sec/?pt=0&scl=1&i2c_dev=bmx280&i2c_par=2:60000:REGEX((.*?))
+  - platform: rest
+    name: balcony_pressure
+    unit_of_measurement: 'мм рт. ст.'
+    device_class: pressure
+    resource: http://192.168.48.30/sec/?pt=0&scl=1&i2c_dev=bmx280&i2c_par=0:60000:REGEX((.*?))
+  - platform: rest
+    name: balcony_luminance
+    unit_of_measurement: 'lux'
+    device_class: illuminance
+    resource: http://192.168.48.30/sec/?pt=0&scl=1&i2c_dev=max44009&i2c_par0:60000:REGEX((.*?))
+
+  - platform: rest
+    name: bedroom_temperature
+    unit_of_measurement: '°C'
+    device_class: temperature
+    resource: http://192.168.48.30/sec/?pt=0&scl=1&i2c_dev=htu21d&i2c_par=1:60000:REGEX((.*?))
+  - platform: rest
+    name: bedroom_humidity
+    unit_of_measurement: '%'
+    device_class: humidity
+    resource: http://192.168.48.30/sec/?pt=0&scl=1&i2c_dev=htu21d&i2c_par=2:60000:REGEX((.*?))
+  - platform: rest
+    name: bedroom_dioxide
+    unit_of_measurement: 'ADC'
+    resource: http://192.168.48.30/sec/?pt=2&cmd=get
+  - platform: rest
+    name: bedroom_battery
+    unit_of_measurement: '°C'
+    device_class: temperature
+    resource: http://192.168.48.30/sec/?pt=7&cmd=list
+    value_template: "{{ value.split('ff01ec721604:')[1] }}"
+
+  - platform: rest
+    name: kitchen_battery
+    unit_of_measurement: '°C'
+    device_class: temperature
+    resource: http://192.168.48.30/sec/?pt=7&cmd=list
+    value_template: "{{ value.split('ffbe6e731603:')[1].split(';')[0] }}"
+
+  - platform: rest
+    name: bathroom_temperature
+    unit_of_measurement: '°C'
+    device_class: temperature
+    resource: http://192.168.48.30/sec/?pt=5&scl=1&i2c_dev=htu21d&i2c_par=1:60000:REGEX((.*?))
+  - platform: rest
+    name: bathroom_humidity
+    unit_of_measurement: '%'
+    device_class: humidity
+    resource: http://192.168.48.30/sec/?pt=5&scl=1&i2c_dev=htu21d&0:60000:REGEX((.*?))
+  - platform: rest
+    name: bathroom_cold_pipe
+    unit_of_measurement: '°C'
+    device_class: temperature
+    resource: http://192.168.48.30/sec/?pt=6&cmd=list
+    value_template: "{{ value.split(';')[0].split(':')[1] }}"
+  - platform: rest
+    name: bathroom_hot_pipe
+    unit_of_measurement: '°C'
+    device_class: temperature
+    resource: http://192.168.48.30/sec/?pt=6&cmd=list
+    value_template: "{{ value.split(';ff7d30211605:')[1] }}"
+  - platform: rest
+    name: bathroom_tub
+    unit_of_measurement: '°C'
+    device_class: temperature
+    resource: http://192.168.48.30/sec/?pt=6&cmd=list
+    value_template: "{{ value.split('ff9ec0711703:')[1].split(';')[0] }}"

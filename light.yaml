@@ -1,0 +1,107 @@
+### Освещение ###
+
+# Внешний вид
+homeassistant:
+  customize:
+    light.bedroom_right_bra:
+      friendly_name: Правая бра
+      icon: mdi:wall-sconce
+    light.hall_lamps:
+      friendly_name: Лампы
+      icon: mdi:ceiling-light
+    light.bedroom_lamps:
+      friendly_name: Лампы
+      icon: mdi:ceiling-light
+    light.bathroom_lamps:
+      friendly_name: Лампы
+      icon: mdi:ceiling-light
+
+# Платформа
+sensor:
+  - platform: rest
+    name: hall_lamps_level
+    resource: http://192.168.48.20/sec/?pt=27&cmd=get
+    scan_interval: 1
+  - platform: rest
+    name: bedroom_lamps_level
+    resource: http://192.168.48.20/sec/?pt=28&cmd=get
+    scan_interval: 1
+  - platform: rest
+    name: bathroom_lamps_level
+    resource: http://192.168.48.20/sec/?pt=25&cmd=get
+    scan_interval: 1
+
+light:
+  - platform: template
+    lights:
+      hall_lamps:
+        level_template: "{{ states('sensor.hall_lamps_level') | int }}"
+        value_template: "{{ states('sensor.hall_lamps_level') | int > 0 }}"
+        turn_on:
+          service: rest_command.megad
+          data:
+            type: '20'
+            port: '27'
+            args: '&pwm=255'
+        turn_off:
+          service: rest_command.megad
+          data:
+            type: '20'
+            port: '27'
+            args: '&pwm=0'
+        set_level:
+          service: rest_command.megad
+          data_template:
+            type: '20'
+            port: '27'
+            args: '&pwm={{ brightness }}'
+      
+      bedroom_lamps:
+        level_template: "{{ states('sensor.bedroom_lamps_level') | int }}"
+        value_template: "{{ states('sensor.bedroom_lamps_level') | int > 0 }}"
+        turn_on:
+          service: rest_command.megad
+          data:
+            type: '20'
+            port: '28'
+            args: '&pwm=255'
+        turn_off:
+          service: rest_command.megad
+          data:
+            type: '20'
+            port: '28'
+            args: '&pwm=0'
+        set_level:
+          service: rest_command.megad
+          data_template:
+            type: '20'
+            port: '28'
+            args: '&pwm={{ brightness }}'
+      
+      bathroom_lamps:
+        level_template: "{{ states('sensor.bathroom_lamps_level') | int }}"
+        value_template: "{{ states('sensor.bathroom_lamps_level') | int > 0 }}"
+        turn_on:
+          service: rest_command.megad
+          data:
+            type: '20'
+            port: '25'
+            args: '&pwm=255'
+        turn_off:
+          service: rest_command.megad
+          data:
+            type: '20'
+            port: '25'
+            args: '&pwm=0'
+        set_level:
+          service: rest_command.megad
+          data_template:
+            type: '20'
+            port: '25'
+            args: '&pwm={{ brightness }}'
+
+yeelight:
+  devices:
+    192.168.48.183:
+      name: bedroom_right_bra
+      model: color2
