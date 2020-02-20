@@ -9,6 +9,10 @@ ______________
 
 Общее описание в [в статье на Хабре](https://habr.com/ru/post/ТУТ/). Подробности, фотографии и схемы на [форуме](https://www.ab-log.ru/forum/viewtopic.php?f=1&t=1373).
 
-Текущий вид интерфейса Home Assistant:
-![Текущий вид интерфейса Home Assistant](https://github.com/empenoso/two-bedroom-flat-Home-Assistant/blob/master/2019_11_screenshot.png)
+Текущие виды интерфейса Home Assistant:
+![Текущий вид интерфейса Home Assistant](https://github.com/empenoso/Home-Assistant_one-room-apartment/blob/master/photo_2020-02-19_09-26-58.jpg)
+![Текущий вид интерфейса Home Assistant](https://github.com/empenoso/Home-Assistant_one-room-apartment/blob/master/photo_2020-02-19_09-27-00.jpg)
+
+
+
 
