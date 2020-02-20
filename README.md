@@ -1,0 +1,1 @@
+# Home-Assistant_one-room-apartment
