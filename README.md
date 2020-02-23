@@ -8,7 +8,7 @@ ______________
 
 Automation was done using the  multifunctional MegaD-2561 controller.
 
- Additional information [in the article (in Russian)](https://habr.com/ru/post/NNNNN/). Details, photos and diagrams on the [forum (in Russian)](https://www.ab-log.ru/forum/viewtopic.php?f=1&t=1373). 
+ Additional information [in the article (in Russian)](https://habr.com/en/post/NNNNN/). Details, photos and diagrams on the [forum (in Russian)](https://www.ab-log.ru/forum/viewtopic.php?f=1&t=1373). 
 
 Current view of the Home Assistant interface:
 ![Current view of the Home Assistant interface](https://github.com/empenoso/Home-Assistant_one-room-apartment/blob/master/photo_2020-02-19_09-26-58.jpg)
